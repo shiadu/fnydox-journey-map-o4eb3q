@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<title>Meditation user journey map</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600&family=Nunito+Sans:ital,wght@0,400;0,600;0,700;1,400&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ground:#4a4e9e; --ink:#2b2d6e; --paper:#fffdfa; --line:rgba(43,45,110,.14);
+  --blue:#cfe0f7; --pink:#f9d5d3; --yellow:#fbf0b8; --lav:#dcd8f6;
+  --blue-s:#8fb4ea; --pink-s:#ee9fa0; --yellow-s:#e3cb55;
+  --onground:#ffffff; --onground-soft:#d9dbfb;
+  --display:'Fredoka','Noto Sans SC','PingFang SC','Microsoft YaHei','Trebuchet MS',system-ui,sans-serif;
+  --body:'Nunito Sans','Noto Sans SC','PingFang SC','Microsoft YaHei','Segoe UI',system-ui,sans-serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){ --ground:#2f3273; --onground-soft:#c4c7f0; }
+}
+:root[data-theme="dark"]{ --ground:#2f3273; --onground-soft:#c4c7f0; }
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 12px)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--ground);color:var(--onground);font-family:var(--body);-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit}
+.page{max-width:1500px;margin:0 auto;padding:32px 28px 56px}
+
+.mast{display:flex;flex-wrap:wrap;gap:24px 48px;align-items:flex-end;justify-content:space-between;margin-bottom:22px}
+.mast h1{font:600 46px/1.05 var(--display);margin:0 0 10px;letter-spacing:-.01em}
+.mast p{margin:0;max-width:62ch;font-size:15px;line-height:1.5;color:var(--onground-soft)}
+.mast .meta{margin-top:10px;font-size:13px}
+.stats{display:flex;gap:12px;flex-wrap:wrap}
+.stat{border-radius:22px;padding:12px 18px;min-width:128px;color:var(--ink)}
+.stat b{display:block;font:600 26px/1 var(--display)}
+.stat span{font-size:12px}
+.stat:nth-child(1){background:var(--blue)} .stat:nth-child(2){background:var(--pink)} .stat:nth-child(3){background:var(--yellow)}
+
+/* toolbar */
+.bar-tools{display:flex;flex-wrap:wrap;gap:12px 20px;align-items:center;justify-content:space-between;margin:0 0 16px}
+.seg{display:inline-flex;background:rgba(255,255,255,.14);border-radius:99px;padding:4px}
+.seg button,.pill{border:0;cursor:pointer;border-radius:99px;padding:8px 16px;background:transparent;font:500 14px var(--display)}
+.seg button[aria-pressed="true"]{background:#fff;color:var(--ink)}
+.pill{background:rgba(255,255,255,.14)}
+.pill:hover,.seg button:hover{background:rgba(255,255,255,.26)} .seg button[aria-pressed="true"]:hover{background:#fff}
+.tools2{display:flex;gap:8px;flex-wrap:wrap}
+.langbar{display:flex;justify-content:flex-end;margin:0 0 14px}
+.hint{margin:0 0 14px;font-size:13px;color:var(--onground-soft)}
+
+/* journey strip */
+.s1{--t:#cfe0f7;--ts:#8fb4ea} .s2{--t:#dbdaf6;--ts:#a29fe3} .s3{--t:#efd8f0;--ts:#cf9fd2}
+.s4{--t:#f9d5d3;--ts:#ee9fa0} .s5{--t:#fbe3c3;--ts:#efb676} .s6{--t:#fbf0b8;--ts:#e3cb55}
+.st{--t:var(--lav);--ts:#9a93e0}
+.strip{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px}
+.card{border:0;text-align:left;cursor:pointer;background:var(--t);color:var(--ink);border-radius:30px;padding:0 0 16px;display:flex;flex-direction:column;position:relative;transition:transform .2s ease,box-shadow .2s ease}
+.card:hover{transform:translateY(-3px)}
+.card[aria-pressed="true"]{transform:translateY(-6px);box-shadow:0 0 0 4px #fff}
+.card svg.art{display:block;width:100%;height:auto}
+.card .nm{display:flex;gap:9px;align-items:center;padding:0 14px}
+.num{flex:none;width:28px;height:28px;border-radius:50%;background:var(--ink);color:#fff;display:inline-grid;place-items:center;font:600 14px var(--display)}
+.card .t{font:600 17px/1.15 var(--display)}
+.card .uq{display:block;padding:8px 14px 0;font:400 13px/1.4 var(--body)}
+.card .mini{display:block;margin:12px 14px 0;font-size:11.5px}
+.bar{display:block;height:7px;border-radius:99px;background:rgba(43,45,110,.16);margin:0 0 5px;overflow:hidden}
+.bar i{display:block;height:100%;border-radius:99px;background:var(--ink)}
+.card .open{display:inline-flex;align-items:center;gap:6px;margin:12px 14px 0;font:500 13px var(--display)}
+.card .open::after{content:"";width:8px;height:8px;border-right:2.5px solid var(--ink);border-bottom:2.5px solid var(--ink);transform:rotate(45deg);margin-top:-3px}
+.card[aria-pressed="true"] .open{opacity:.0}
+
+.track{position:relative;height:30px;margin:0 0 14px;--k:0;--w:calc((var(--k) + .5) * (100% - 60px) / 6 + var(--k) * 12px)}
+.rail{position:absolute;left:0;right:0;top:50%;height:10px;margin-top:-5px;border-radius:99px;overflow:hidden;background:linear-gradient(90deg,#8fb4ea,#a29fe3,#cf9fd2,#ee9fa0,#efb676,#e3cb55)}
+.veil{position:absolute;top:0;bottom:0;right:0;left:var(--w);background:var(--ground);opacity:.72;transition:left .35s ease}
+.track.done .veil{left:100%}
+.dots{position:absolute;inset:0;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px}
+.dots b{justify-self:center;align-self:center;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font:600 13px var(--display);background:var(--ground);color:#fff;box-shadow:0 0 0 2px rgba(255,255,255,.35);transition:transform .2s ease,box-shadow .2s ease}
+.dots b.on{background:var(--ts);color:var(--ink);box-shadow:0 0 0 2px var(--ink)}
+.dots b.cur{transform:scale(1.18);box-shadow:0 0 0 3px #fff}
+.stems{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px}
+.stems i{height:26px;position:relative}
+.stems i::before{content:"";position:absolute;left:50%;top:0;bottom:6px;width:3px;margin-left:-1.5px;background:rgba(255,255,255,.4);border-radius:3px}
+.stems i::after{content:"";position:absolute;left:50%;bottom:0;width:11px;height:11px;margin-left:-5.5px;border-radius:50%;background:var(--lav)}
+.layerbtn{width:100%;border:0;cursor:pointer;text-align:left;background:var(--lav);color:var(--ink);border-radius:30px;padding:14px 24px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;transition:box-shadow .2s ease,transform .2s ease}
+.layerbtn:hover{transform:translateY(-2px)}
+.layerbtn[aria-pressed="true"]{box-shadow:0 0 0 4px #fff}
+.layerbtn svg{flex:none}
+.layerbtn b{font:600 18px var(--display)}
+.layerbtn span{font-size:13px}
+
+/* detail panel */
+#detail{margin-top:26px;display:flex;flex-direction:column;gap:26px}
+.panel{background:var(--paper);background:color-mix(in srgb,var(--t) 34%,#fff);color:var(--ink);border-radius:36px;padding:26px 28px 30px;scroll-margin-top:16px}
+.panel.enter{animation:rise .28s ease}
+@keyframes rise{from{opacity:.0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.ph{display:grid;grid-template-columns:230px minmax(0,1fr) auto;gap:8px 26px;align-items:center;margin-bottom:20px}
+.ph .phart{background:var(--t);border-radius:28px;overflow:hidden}
+.ph .phart svg{display:block;width:100%;height:auto}
+.pn{display:flex;gap:10px;align-items:center;font:500 14px var(--display)}
+.ph h2{margin:8px 0 0;font:600 34px/1.1 var(--display)}
+.ph .uq{margin:8px 0 8px;font:500 21px/1.3 var(--display)}
+.ph .goal{margin:0;max-width:72ch;font-size:15px;line-height:1.55}
+.pnav{display:flex;flex-direction:column;gap:8px;align-self:start}
+.pnav button{border:0;cursor:pointer;background:var(--ink);color:#fff;border-radius:99px;padding:9px 18px;font:500 14px var(--display);white-space:nowrap}
+.pnav button{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.pnav svg{flex:none}
+.pnav button:disabled{opacity:.35;cursor:default}
+.pnav button:not(:disabled):hover{background:#3d40a0}
+.cols{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.col{display:flex;flex-direction:column;gap:14px;min-width:0}
+details.acc{background:rgba(255,255,255,.8);border-radius:24px;overflow:hidden}
+details.acc summary{list-style:none;cursor:pointer;padding:15px 20px;font:600 17px var(--display);display:flex;justify-content:space-between;align-items:center;gap:12px}
+details.acc summary::-webkit-details-marker{display:none}
+details.acc summary::after{content:"";flex:none;width:9px;height:9px;border-right:3px solid currentColor;border-bottom:3px solid currentColor;transform:rotate(45deg);margin:-4px 4px 0 0;transition:transform .2s ease}
+details.acc[open] summary::after{transform:rotate(-135deg);margin-top:4px}
+details.acc summary:hover{background:rgba(255,255,255,.7)}
+.accb{padding:0 20px 18px;font-size:14.5px;line-height:1.55}
+.accb p{margin:0}
+.accb ul{margin:0;padding-left:18px} .accb li{margin:0 0 7px} .accb li:last-child{margin-bottom:0}
+.accb .aside{font-size:12.5px;opacity:.85}
+.oppb{background:var(--t);border-radius:16px;padding:12px 16px;margin-bottom:14px;font:600 18px/1.3 var(--display)}
+details.acc.risk{background:var(--ink);color:#fff}
+details.acc.risk summary:hover{background:rgba(255,255,255,.08)}
+
+.cnt .big{font:600 38px/1 var(--display)}
+.cnt .big small{font:400 13px var(--body);margin-left:8px}
+.cnt .bar{height:9px;margin:10px 0 14px}
+.sm{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.sm div{background:var(--paper);background:color-mix(in srgb,var(--t) 30%,#fff);border-radius:14px;padding:8px 10px}
+.sm b{display:block;font:600 18px/1.1 var(--display)}
+.sm span{font-size:11.5px}
+.cnt .note{margin-top:10px;font-size:12.5px;line-height:1.45;opacity:.85}
+.q{margin:0 0 12px;background:#fff;border-radius:16px;padding:11px 14px 12px;border-left:6px solid var(--ts)}
+.q:last-child{margin-bottom:0}
+.tag{display:inline-block;font:500 11.5px/1.5 var(--display);padding:0 10px;border-radius:99px;background:var(--t);margin-bottom:6px}
+.q.help .tag{background:var(--ink);color:#fff}
+.q blockquote{margin:0;font-style:italic;font-size:14px;line-height:1.55}
+.q figcaption{margin-top:7px;font-size:12px;line-height:1.4;opacity:.75}
+
+footer{margin-top:34px;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px 28px;font-size:12.5px;line-height:1.55;color:var(--onground-soft)}
+footer h3{margin:0 0 6px;font:500 14px var(--display);color:#fff}
+footer ul{margin:0;padding-left:16px}
+
+:focus-visible{outline:3px solid #fff;outline-offset:3px}
+.panel :focus-visible,.card:focus-visible{outline-color:var(--ink)}
+.card:focus-visible,.layerbtn:focus-visible{outline:3px solid #fff;outline-offset:6px}
+
+@media (max-width:1100px){
+  .strip{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .stems,.track{display:none}
+  .layerbtn{margin-top:12px}
+  .ph{grid-template-columns:200px minmax(0,1fr)}
+  .pnav{grid-column:1 / -1;flex-direction:row}
+}
+@media (max-width:820px){
+  .cols{grid-template-columns:1fr}
+  .sm{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:620px){
+  .page{padding:22px 14px 40px}
+  .mast h1{font-size:34px}
+  .strip{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .card .t{font-size:15px}
+  .panel{padding:18px 14px 20px;border-radius:28px}
+  .ph{grid-template-columns:1fr}
+  .ph .phart{max-width:240px}
+  .ph h2{font-size:28px}
+}
+@media (prefers-reduced-motion: reduce){
+  .veil,.dots b,.card,.layerbtn,details.acc summary::after{transition:none}
+  .panel.enter{animation:none}
+}
+
+.q.zhq blockquote{font-style:normal}
+.q .orig{margin:8px 0 0;padding-top:8px;border-top:1px dashed rgba(43,45,110,.28);font-size:12px;line-height:1.5;font-style:italic;opacity:.85}
+.q .orig b{font-style:normal;font:600 11.5px var(--display);margin-right:6px;opacity:1}
+@page{size:A3 portrait;margin:10mm}
+@media print{
+  :root{padding:0}
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .bar-tools,.hint,.pnav,.stems{display:none}
+  .card{transform:none!important;box-shadow:none!important}
+  .card .open{display:none}
+  .panel{break-inside:avoid-page}
+}
+</style>
+</head>
+<body>
+<!-- reusable meditating figure, drawn in the flat style of the reference -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="fig" viewBox="0 0 200 180">
+      <path d="M22 150 C28 122 72 118 100 128 C128 118 172 122 178 150 C150 170 50 170 22 150Z" fill="var(--legs,#fff)"/>
+      <path d="M58 142 C80 131 120 131 142 142 C120 156 80 156 58 142Z" fill="var(--legs2,#e9e6fb)"/>
+      <path d="M76 54 C70 14 130 14 124 54 C130 80 136 102 128 116 L72 116 C64 102 70 80 76 54Z" fill="var(--hair,#2b2d6e)"/>
+      <path d="M80 84 C80 74 120 74 120 84 L125 130 C110 139 90 139 75 130Z" fill="var(--top,#f6e08a)"/>
+      <path d="M82 86 C62 98 48 114 40 130" stroke="var(--skin,#f4c7ab)" stroke-width="9" fill="none" stroke-linecap="round"/>
+      <path d="M118 86 C138 98 152 114 160 130" stroke="var(--skin,#f4c7ab)" stroke-width="9" fill="none" stroke-linecap="round"/>
+      <circle cx="38" cy="132" r="6" fill="var(--skin,#f4c7ab)"/><circle cx="162" cy="132" r="6" fill="var(--skin,#f4c7ab)"/>
+      <rect x="94" y="68" width="12" height="16" rx="5" fill="var(--skin,#f4c7ab)"/>
+      <circle cx="100" cy="54" r="19" fill="var(--skin,#f4c7ab)"/>
+      <path d="M80 54 C77 30 123 30 120 54 C112 45 92 43 80 54Z" fill="var(--hair,#2b2d6e)"/>
+      <path d="M90 57 q4.5 3.5 9 0 M101 57 q4.5 3.5 9 0" stroke="var(--hair,#2b2d6e)" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+      <path d="M95 66 q5 3.5 10 0" stroke="#d98a7a" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+    </symbol>
+  </defs>
+</svg>
+
+
+<div class="page">
+  <div class="langbar"><div class="seg langseg" role="group" aria-label="Language / 语言"><button type="button" data-lang="en" aria-pressed="true">English</button><button type="button" data-lang="zh" aria-pressed="false">中文</button></div></div>
+  <header class="mast">
+    <div>
+      <h1 data-t="h1">Meditation user journey map</h1>
+      <p data-t="lede">What r/Meditation users ask, struggle with and need as they move from a first hope to a lasting practice, with the product opportunity and the risk at each stage.</p>
+      <p class="meta" data-t="meta">Fnydox product ideation. AI-assisted thematic analysis, V3 quote-audited, 13 October 2026.</p>
+    </div>
+    <div class="stats" aria-label="Size of the coded dataset">
+      <div class="stat"><b>366</b><span data-t="st1">threads</span></div>
+      <div class="stat"><b>6,081</b><span data-t="st2">coded source items</span></div>
+      <div class="stat"><b>13,073</b><span data-t="st3">coded excerpts</span></div>
+    </div>
+  </header>
+
+  <div class="bar-tools">
+    <div class="seg" role="group" aria-label="View mode">
+      <button type="button" data-mode="one" aria-pressed="true" data-t="m1">One stage at a time</button>
+      <button type="button" data-mode="all" aria-pressed="false" data-t="m2">All stages open</button>
+    </div>
+    <div class="tools2">
+      <button type="button" class="pill" id="expandAll" data-t="ex">Expand all sections</button>
+      <button type="button" class="pill" id="collapseAll" data-t="co">Collapse all sections</button>
+    </div>
+  </div>
+  <p class="hint" data-t="hint">Select a stage to open its details. Left and right arrow keys move between stages. The bar on each card compares coded excerpts across stages. Counts are coded expressions, not unique users.</p>
+
+  <nav aria-label="Journey stages">
+    <div class="track" id="track" aria-hidden="true"><span class="rail"><i class="veil"></i></span><span class="dots"><b class="s1">1</b><b class="s2">2</b><b class="s3">3</b><b class="s4">4</b><b class="s5">5</b><b class="s6">6</b></span></div>
+    <div class="strip" id="strip"></div>
+    <div class="stems" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    <button type="button" class="layerbtn st" id="layerbtn" data-i="6" aria-pressed="false">
+      <svg width="40" height="46" viewBox="-24 -28 48 60" aria-hidden="true"><path d="M0 -26 L22 -17 V6 C22 20 11 29 0 34 C-11 29 -22 20 -22 6 V-17Z" fill="#fff" stroke="#2b2d6e" stroke-width="3" stroke-linejoin="round"/><path d="M-9 4 L-2 11 L11 -6" stroke="#2b2d6e" stroke-width="3.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <b data-t="lb">Cross-stage layer: Can I trust this guidance?</b>
+      <span data-t="ls">Runs across all six stages. Select to open credibility, autonomy, and safety.</span>
+    </button>
+  </nav>
+
+  <main id="detail" aria-live="polite"></main>
+
+  <footer>
+    <section>
+      <h3 data-t="f1h">How to read the evidence</h3>
+      <ul>
+        <li data-t="f1a">Quote IDs are Reddit item IDs from the coded dataset, followed by the code applied and whether the source was an original post (OP post) or a comment.</li>
+        <li data-t="f1b">Comment counts are comment items. Author IDs were not in the export, so they are not unique commenters.</li>
+        <li data-t="f1c">Stages 1 and 6 draw on the same theme (V2_T4), so their counts match. Stage 3 shows the sleepiness and body-boundary count, with posture and setup codes as added support.</li>
+        <li data-t="f1d">Quotes show user need. They are not clinical, spiritual, or efficacy claims.</li>
+      </ul>
+    </section>
+    <section>
+      <h3 data-t="f2h">Limits</h3>
+      <ul>
+        <li data-t="f2a">Reddit data comes from self-selected participants and does not represent all meditation users.</li>
+        <li data-t="f2b">This is a journey map, not a persona set, and it shows no emotion curve because emotions were not coded.</li>
+        <li data-t="f2c">Clinical, trauma and mental-health readings stay descriptive and cautious.</li>
+        <li data-t="f2d">Validate product decisions with Fnydox target users through concept tests, usability tests and interviews.</li>
+      </ul>
+    </section>
+  </footer>
+</div>
+
+<script>
+/* ---------- content ---------- */
+const stages = [
+{
+  name:'Trigger and intention',
+  q:'Why am I meditating, and what do I hope will change?',
+  goal:'Bring a hoped-for change to meditation. Goals are plural and layered: relief from distress and life problems, sleep and rest, meaning and spiritual growth, self-change and habit change, a steadier mind and routine, or simple curiosity. One user often carries several at once.',
+  actions:['Searches for meditation advice','Frames meditation as a possible solution to a life problem','Looks for reassurance that it can help','Tests whether the goal is realistic'],
+  pains:['Strong hopes meet benefits that are uncertain and non-linear','Needs expectation-setting that respects the goal without promising fixed outcomes','Needs help turning an abstract goal into a safe first practice choice'],
+  means:'The journey starts before users know which practice to try. They are asking whether meditation can plausibly help with a meaningful problem, and the product should respect that without overclaiming.',
+  themes:['Insight 05: Ongoing practice / evaluating progress','V2_T4: Meditators evaluate progress through goals, experiences, and expectations'],
+  counts:{e:1223,s:1115,t:270,o:138,c:977,note:'Shared with stage 6 (same theme).'},
+  quotes:[
+    {id:'1w0f57n',code:'goal_or_manifestation_or_self_change',src:'OP post',text:'When I want to change my life to make good decisions after making bads one over and over... the reason I make the bad decision is cause the feeling... I learned to sit with the discomfort so I can let it go.'},
+    {id:'p6ja67i',code:'limited_or_uncertain_benefit',src:'comment',text:'There is more than one path. Our inner worlds are different, and what works for you has no impact on what works for me... My hope is that everyone finds a path that works for them.'},
+    {id:'p67iemq',code:'sustaining_consistent_meditation',src:'comment',help:true,text:'If you\'re training focus or building a habit, shorter sits a few times a day tend to work better than forcing one marathon session where you\'re half-asleep by the end... I\'d stick with 30-40 min sessions and maybe add a second one later in the day.'}
+  ],
+  opp:'Intention-setting and expectation framing',
+  rec:['Ask "What brings you here today?" and "What would make this feel useful after one week?"','Sort goals into product-safe categories: sleep/rest, focus, emotional regulation, curiosity, spiritual exploration, habit support, general wellbeing','Use cautious language: "practice may support..." not "this will fix..."','Offer a first practice based on goal and constraints'],
+  risk:'Promising healing, clinical improvement, transformation, or guaranteed calm.'
+},
+{
+  name:'Choosing a practice',
+  q:'Which method fits me?',
+  goal:'Decide which method, format, teacher, app, anchor, duration, posture, or tradition fits.',
+  actions:['Compares breath, body scan, mantra, guided audio, open awareness, walking, sleep meditation, and spiritual, traditional or secular routes','Asks whether there is a "better" or "proper" way','Chooses by what feels tolerable, interesting, credible, accessible, or compatible with beliefs','Switches when a voice, format, or style does not fit'],
+  pains:['Too many methods, and no clear way to tell which one fits','"Proper meditation" gets confused with "the method that fits my goal and context"','Needs structured selection, not only a large content library'],
+  means:'Method choice is a major moment. Users are negotiating fit, legitimacy, comfort, trust, and practical feasibility, not only picking content.',
+  themes:['Insight 01: Before practice / choosing a method','V2_T2: Meditation practice is shaped by concrete method decisions','V2_T3: Tradition, modern tools, and personal fit shape what counts as proper meditation'],
+  counts:{e:1805,s:1555,t:301,o:153,c:1402},
+  quotes:[
+    {id:'1wg8rp8',code:'method_confusion_or_overload',src:'OP post',text:'…i looked it up and theres so many breathing exercises or diff forms of meditating i\'m a bit overwhelmed so can someone pls help me on how should i start meditating and progress it?'},
+    {id:'p68gqhv',code:'selecting_practice_by_personal_fit',src:'comment',text:'Tried a couple of his guided audio meditation sessions. I can\'t get past the voice.'},
+    {id:'p6pyubs',code:'method_confusion_or_overload',src:'comment',help:true,text:'It\'s very normal to not be able to meditate solidly at first... Try a few ways to meditate. Some just won\'t fit for you.'}
+  ],
+  opp:'Practice matching and experiment loop',
+  rec:['Match on goal, time, body comfort, desired guidance, spiritual preference, prior experience, and preferred anchor','Method comparison cards: what it helps with, who may like it, when to avoid it, what to notice afterward','Let users try one method briefly, reflect on fit, then adjust the next recommendation','Never present one method as universally best'],
+  risk:'A content library that forces users to self-diagnose method fit without guidance.'
+},
+{
+  name:'Starting and setting up',
+  q:'How do I begin in real life?',
+  goal:'Turn a chosen practice into an actual session in a real-life context.',
+  actions:['Chooses session length, frequency, posture, location, audio, timer, and time of day','Decides whether to sit, lie down, walk, use guided audio or a mantra, or focus on breath, body, or sound','Adapts around posture pain, fatigue, sleepiness, limited space, noise, family, and work'],
+  pains:['Needs practical setup support, not only philosophical instruction','Pain, tightness, numbness, and strain can make standard seated meditation unrealistic','Some users have little space and no control over a quiet environment','Sleepiness can be wanted in rest mode but blocks daytime awareness mode'],
+  means:'Many opportunities sit before the session begins. An unrealistic posture, duration, or setting can end the practice before the instruction matters.',
+  themes:['Insight 03: During/after practice / sleepiness boundary','V2_T2: Meditation practice is shaped by concrete method decisions','V2_T7: Sustainable practice depends on life-fit, not just motivation'],
+  counts:{e:615,s:576,t:189,o:61,c:515,note:'Sleepiness and body-boundary need. Posture and setup codes add further support.'},
+  quotes:[
+    {id:'1w4a780',code:'posture_and_physical_setup',src:'OP post',text:'I\'m prone to lower back pain because of a degenerated spine and the ache worsens on sitting or not moving... I\'ve been practicing sitting on the floor for an hour every day but can already feel the lower back being tighter afterwards... I\'m really worried about managing the full course.'},
+    {id:'p6pjipf',code:'posture_and_physical_setup',src:'OP reply',text:'Spot is my room only... I am a college student who is not allowed to leave her hostel.'},
+    {id:'p77r039',code:'posture_and_physical_setup',src:'comment',help:true,text:'No need to push the injury. You\'re free to sit for a bit and lie down when the back is tired and go back to sitting when you feel rested.'}
+  ],
+  opp:'Setup guidance and adaptive session planning',
+  rec:['Ask for a mode first: sleep/rest, calm down, focus, awareness, reset, exploration','Ask about pain, back, hip and knee comfort, chair/floor/lying options, space, and noise','Offer posture alternatives: chair, cushion, lying semi-supine, walking, standing, shorter sits','Offer environment options: nature sounds, guided audio, sound as anchor, walking for noisy settings','Suggest session length from goal, experience, body state, and past completion'],
+  risk:'Treating an ideal quiet seated posture as the default for everyone, or treating sleepiness as always good or always bad.'
+},
+{
+  name:'During practice',
+  q:'What should I do with thoughts, sensations, breath, and distraction?',
+  goal:'Meditate and manage what happens moment by moment.',
+  actions:['Notices thoughts, breath, sensations, visions, sleepiness, restlessness, boredom, and drift','Tries to observe, control, suppress, return to an anchor, or understand','May get stuck in loops: thinking about breathing, trying too hard, judging the session'],
+  pains:['Unsure whether distraction means failure','Does not know whether to observe or control thoughts, breath, sensations, and visions','Needs simple recovery actions that do not deepen self-judgment'],
+  means:'The strongest interaction opportunity is the "notice and return" loop. Users need support when practice gets messy, not only when it feels calm.',
+  themes:['Insight 02: During practice / managing experience','V2_T1: Meditators negotiate between observing and controlling experience'],
+  counts:{e:2003,s:1656,t:307,o:173,c:1483},
+  quotes:[
+    {id:'p6e96y0',code:'thought_observation',src:'comment',text:'The mind will try anything to grab your attention during meditation. Nothing to read into it unless you are inclined to do so.'},
+    {id:'p6aa7rr',code:'breath_awareness_practice',src:'comment',text:'It gets weird when you realize you\'re thinking about thinking about breathing and then suddenly you\'re in some meta loop that makes no sense.'},
+    {id:'p6pjgg3',code:'attention_return_practice',src:'comment',help:true,text:'Not being able to focus is part of the practice... pay attention to a focal point like the breath and gently noticing when you get lost. Just come back. Start over.'}
+  ],
+  opp:'In-session guidance and reflection tags',
+  rec:['Gentle anchor options: breath, body, sound, visual object, mantra, open awareness','Normalize distraction: noticing wandering can be part of practice','After-session tags: thoughts, breath loop, pain, sleepiness, calm, vision, frustration, ease, fear, boredom','Micro-guidance based on reflection patterns'],
+  risk:'Making users feel they failed because of thoughts, discomfort, sleepiness, or attention drift.'
+},
+{
+  name:'After practice and meaning-making',
+  q:'What did that experience mean?',
+  goal:'Understand what happened and whether it is normal, useful, risky, spiritual, psychological, or irrelevant.',
+  actions:['Interprets visions, sounds, body sensations, altered time, vivid perception, floating feelings, or emotional release','Searches community explanations or teacher frameworks','Looks for reassurance, validation, correction, or safety boundaries','May be drawn toward chasing unusual experiences'],
+  pains:['Unusual experiences can feel meaningful, exciting, confusing, or worrying','Needs a safe interpretation layer that neither dismisses nor overclaims meaning','Frightening, persistent, or destabilizing experiences, and voices outside practice, need careful safety language'],
+  means:'Meaning-making is part of the journey. Users bring spiritual, psychological, somatic, or clinical frames to the same experience, so interpretation needs care.',
+  themes:['Insight 04: After practice / interpreting unusual experiences','V2_T5: Unusual meditation experiences create interpretation needs','<span class="aside">Round 3 novelty audit flags possible review areas, not yet final codes: dream and lucid sleep overlap, self-reported health or clinical context, somatic release and trauma body claims.</span>'],
+  counts:{e:565,s:479,t:179,o:69,c:410},
+  quotes:[
+    {id:'p6ccaza',code:'meaning_making_about_unusual_experience',src:'comment',text:'It feels so good to talk to someone else about this... anytime I try to share my insight with others they call me crazy or high... for a bit there I was feeling like it was just me.'},
+    {id:'1w3kt1z',code:'auditory_phenomena_during_meditation',src:'OP post',text:'Has anyone else ever heard somebody else\'s voice during their meditation? Today I was questioning my own sanity after my practise... can this just possibly be my mind\'s interpretation of something else while I\'m deep in meditation?'},
+    {id:'p6u33wt',code:'meaning_making_about_unusual_experience',src:'comment',help:true,text:'Let it go and not get wrapped up in the belief side of things... no need to fight them or do anything about them except notice them non-judgmentally... if these sorts of beliefs do intrude into your waking life... consider enlisting the help of others.'}
+  ],
+  opp:'Experience journal, education, and safety prompts',
+  rec:['Let users log experiences without forcing a diagnosis or spiritual interpretation','Tags: vision, sound, body sensation, time distortion, calm, fear, confusion, floating, dreamlike, vivid perception','Common-experience library with careful source labels','Safety prompts for experiences that are frightening, disruptive, persistent, or involve hearing voices beyond practice','If sharing is added: moderation categories, and do not reward extreme-state chasing'],
+  risk:'Encouraging unsupported claims, extreme-state chasing, or clinical interpretation beyond the data.'
+},
+{
+  name:'Progress, adaptation, and sustainability',
+  q:'Is this working, and how do I keep going?',
+  goal:'Judge whether meditation is working and decide whether to continue, change method, reduce intensity, restart, or stop.',
+  actions:['Compares expected benefits with actual experience','Tracks calm, attention, consistency, emotional regulation, sleep, habit change, or spiritual meaning','Adjusts duration, method, schedule, teacher, or app','Continues, restarts, pauses, or becomes inconsistent'],
+  pains:['Wants results, but progress is subtle, non-linear, and method-dependent','May stop when practice feels ineffective, confusing, too demanding, too sleepy, too intense, or poorly fitted to daily life','Needs support based on practice quality and fit, not guaranteed outcomes'],
+  means:'Help users learn from practice over time. The point is not streaks but fit, building capacity, and reading uneven sessions realistically.',
+  themes:['Insight 05: Ongoing practice / evaluating progress','V2_T4: Meditators evaluate progress through goals, experiences, and expectations','V2_T7: Sustainable practice depends on life-fit, not just motivation'],
+  counts:{e:1223,s:1115,t:270,o:138,c:977,note:'Shared with stage 1 (same theme).'},
+  quotes:[
+    {id:'p6sj94k',code:'limited_or_uncertain_benefit',src:'comment',text:'Meditation development isn\'t linear and doesn\'t necessarily feel like progress while it\'s happening... The sessions that feel most \'off\' or restless are often doing just as much as the ones that feel deep and peaceful.'},
+    {id:'p69vmcr',code:'discontinuing_or_disrupted_meditation',src:'comment',text:'I have not been consistently meditating in a couple of years. But, I was faithful with it for a long time before that. I guess what I need to do is just start and stick with it.'},
+    {id:'p6j4tsl',code:'pleasant_calm_or_positive_outcome',src:'comment',help:true,text:'My meditation practices help me relax and calm down in systematic ways... over time, I have developed greater reserves of calm that last me whole days and weeks.'}
+  ],
+  opp:'Progress tracking and routine adaptation',
+  rec:['Track consistency, ease of returning attention, emotional awareness, fit, body comfort, sleepiness, post-session clarity','Reflection prompts: "What changed, if anything?" and "What felt hard today?"','Suggest adjustments from repeated patterns: falling asleep, body pain, boredom, method mismatch','Support restart paths for users who lapse'],
+  risk:'Reducing progress to streaks, fixed outcomes, or guaranteed transformation claims.'
+}
+];
+
+const trust = {
+  q:'Can I trust this guidance?',
+  goal:'Get guidance they can trust without feeling coerced, misled, sold to, pathologized, or pushed into a belief system.',
+  actions:['Evaluates teachers, apps, branded methods, scientific claims, community advice, and commercial offers','Checks whether a source feels credible, evidence-based, spiritual, secular, traditional, commercial, or coercive','Accepts or rejects advice by fit and perceived authority'],
+  pains:['Sensitive to fake experts, unsupported claims, cult-like dynamics, paid gates, and commercial motives','Wants autonomy to choose spiritual, secular, scientific, or tradition-based paths','Needs clear boundaries around health, trauma, mental experience, and extraordinary claims'],
+  means:'Trust is not a separate marketing issue. It shapes whether users choose a method, accept guidance, disclose unusual experiences, pay for content, or keep using the product.',
+  themes:['Insight 06: Across journey / trust and credibility','V2_T6: Trust is evaluated through authority, evidence, fit, and autonomy'],
+  counts:{e:567,s:520,t:173,o:26,c:494},
+  quotes:[
+    {id:'p682mhp',code:'scientific_or_commercial_credibility_concern',src:'comment',text:'Pay attention to the following red flags to spot fake scientists... No peer-reviewed research. It\'s not a good sign if you do a quick search in Google Scholar and nothing comes up.'},
+    {id:'p6iapq6',code:'credibility_authority_or_trust_evaluation',src:'comment',text:'He mentions how he doesn\'t care for convincing academic skeptics... if his studies had any real legitimacy wouldn\'t academic scrutiny help his cause?'},
+    {id:'1w6bd6d',code:'cult_or_coercion_concern',src:'OP post',text:'I didn\'t expect the experience to be so incredibly intensive... pain, sleep deprivation, and chanting/gongs really made me feel like I was starting to lose it... I did not feel comfortable putting the control and influence of my now supple and super malleable brain to a certain Mr. S. N. Goenka.'}
+  ],
+  opp:'Trust architecture across the product',
+  rec:['Label guidance sources: community-derived, teacher/tradition-based, expert-informed, research-informed, product-created','Label claim type: user-reported, traditional/spiritual, evidence-informed, educational','Let users choose secular, spiritual, tradition-based, or mixed pathways','Be open about what is free, what is paid, and which claims are not being made','Set safety boundaries for clinical, trauma, and destabilizing experiences'],
+  risk:'Hiding commercial motives, exaggerating authority, or pressuring users toward one worldview.'
+};
+
+/* ---------- header illustrations (flat, in the reference style) ---------- */
+const INK='#2b2d6e', WHITE='#ffffff', PINK='#f9d5d3', BLUE='#cfe0f7', YEL='#fbf0b8';
+const sparkle=(x,y,s,c)=>`<path d="M${x} ${y-s} Q${x} ${y} ${x+s} ${y} Q${x} ${y} ${x} ${y+s} Q${x} ${y} ${x-s} ${y} Q${x} ${y} ${x} ${y-s}Z" fill="${c}"/>`;
+const dot=(x,y,r,c)=>`<circle cx="${x}" cy="${y}" r="${r}" fill="${c}"/>`;
+const heart=(x,y,k,c)=>`<path transform="translate(${x} ${y}) scale(${k})" d="M0 -4 C-8 -14 -22 -4 -10 8 L0 18 L10 8 C22 -4 8 -14 0 -4Z" fill="${c}"/>`;
+const tile=(x,y,icon)=>`<g transform="translate(${x} ${y})"><rect width="38" height="38" rx="12" fill="#fff"/>${icon}</g>`;
+
+const palettes=[
+  {b2:PINK, top:'#f6e08a', legs2:'#f9d5d3'},
+  {b2:YEL,  top:'#a9c7ee', legs2:'#fbf0b8'},
+  {b2:BLUE, top:'#f2b9bd', legs2:'#cfe0f7'},
+  {b2:YEL,  top:'#f2b9bd', legs2:'#fbf0b8'},
+  {b2:BLUE, top:'#f6e08a', legs2:'#cfe0f7'},
+  {b2:PINK, top:'#a9c7ee', legs2:'#f9d5d3'}
+];
+/* stage icon drawn inside the white circle beside the figure (centred on 0,0) */
+const icons=[
+  /*1 intention: target*/ `<circle r="12"/><circle r="6.5"/><circle r="1.6" fill="${INK}"/>`,
+  /*2 choosing: fork in the road*/ `<path d="M0 13V3M0 3C0 -3 -9 -3 -9 -10M0 3C0 -3 9 -3 9 -10"/><path d="M-13 -7L-9 -13L-5 -7M5 -7L9 -13L13 -7"/>`,
+  /*3 setting up: clock*/ `<circle r="12"/><path d="M0 -6V0L5 3"/>`,
+  /*4 during practice: attention ripple*/ `<circle r="3" fill="${INK}"/><circle r="8.5"/><path d="M-13 -3 A14 14 0 0 1 3 -13.5" stroke-dasharray="1 5"/><path d="M13 3 A14 14 0 0 1 -3 13.5" stroke-dasharray="1 5"/>`,
+  /*5 meaning-making: lightbulb*/ `<path d="M-6 5C-13 -1 -10 -13 0 -13C10 -13 13 -1 6 5C4 7 4 9 4 10H-4C-4 9 -4 7 -6 5Z"/><path d="M-3 13.5H3"/>`,
+  /*6 progress: rising trend*/ `<path d="M-13 9L-4 0L2 5L12 -8"/><path d="M5 -9H12V-2"/>`,
+  /*trust: shield with check*/ `<path d="M0 -13L10 -9V3C10 9 5 13 0 16C-5 13 -10 9 -10 3V-9Z"/><path d="M-4 1L-1 4.5L5 -3"/>`
+];
+const decor=[
+  /*1*/ ()=>({back:'', front: heart(150,26,.9,'#e88ca0')+sparkle(72,56,9,'#fff')+dot(46,96,3,INK)+dot(258,112,4,INK)+dot(104,18,2.5,INK)}),
+  /*2*/ ()=>({back:'', front: tile(22,52,`<path d="M8 20 q4.5-9 9 0 t9 0 t9 0" stroke="${INK}" stroke-width="2.6" fill="none" stroke-linecap="round" transform="translate(-2 0)"/>`)
+         + tile(22,112,`<path d="M19 19 m0 0 a3 3 0 1 1 3 3 a7 7 0 1 1 -7-7 a11 11 0 1 1 11 11" stroke="${INK}" stroke-width="2.4" fill="none" stroke-linecap="round"/>`)
+         + dot(60,118,3,INK)+dot(180,16,3,INK)}),
+  /*3*/ ()=>({back:`<ellipse cx="150" cy="168" rx="82" ry="13" fill="#f0a8b0"/>`,
+         front: `<path d="M44 72 q-8 12 0 24 M54 66 q-13 18 0 36 M64 60 q-18 24 0 48" stroke="${INK}" stroke-width="2.6" fill="none" stroke-linecap="round" opacity=".7"/>`
+         + dot(104,20,3,INK)+sparkle(184,18,8,'#fff')}),
+  /*4*/ ()=>({back:'', front: dot(98,24,3,INK)+dot(112,14,4.5,'#fff')+dot(130,8,6,'#fff')+dot(52,70,4,INK)+dot(246,112,3,INK)+dot(40,104,6,'#fff')
+         + `<path d="M118 70 q22 6 22 28" stroke="${INK}" stroke-width="2" fill="none" stroke-dasharray="3 5" stroke-linecap="round" opacity=".6" transform="translate(40 -8)"/>`}),
+  /*5*/ ()=>({back:'', front: sparkle(64,48,12,'#fff')+sparkle(262,112,8,'#fff')+sparkle(186,20,6,INK)
+         + `<g transform="translate(44 110)"><circle r="17" fill="#fff"/><text y="7" text-anchor="middle" font-family="Fredoka,sans-serif" font-weight="600" font-size="22" fill="${INK}">?</text></g>`
+         + dot(112,16,2.5,INK)}),
+  /*6*/ ()=>({back:'', front: `<g transform="translate(24 152)"><rect x="0" y="0" width="22" height="14" rx="5" fill="#fff"/><rect x="24" y="-14" width="22" height="28" rx="5" fill="#fff" opacity=".9"/><rect x="48" y="-30" width="22" height="44" rx="5" fill="#fff" opacity=".8"/></g>`
+         + sparkle(66,52,8,'#fff')+dot(120,16,3,INK)})
+];
+const trustDecor=()=>({back:'', front: sparkle(62,50,9,'#fff')+dot(44,98,3,INK)+dot(104,18,2.5,INK)+dot(262,112,3,INK)});
+
+function art(i){
+  const p = i===6 ? {b2:BLUE,top:'#f6e08a',legs2:'#cfe0f7'} : palettes[i];
+  const d = i===6 ? trustDecor() : decor[i]();
+  const label = i===6 ? 'trust and safety' : 'stage '+(i+1);
+  /* big stage icon centred as the backdrop; a small meditator sits centred in front of its lower edge */
+  const M = 'translate(108 112) scale(.56) translate(-75 -28)';
+  return `<svg class="art" viewBox="0 0 300 200" role="img" aria-label="Illustration of a small meditating figure in front of a large icon for ${label}" style="--top:${p.top};--legs2:${p.legs2}">
+    <ellipse cx="150" cy="122" rx="128" ry="66" fill="#fff" opacity=".55"/>
+    <path d="M44 74 C32 34 92 12 132 30 C172 10 246 22 258 72 C268 108 240 150 200 152 L96 152 C54 152 50 112 44 74Z" fill="${p.b2}" opacity=".75"/>
+    <circle cx="150" cy="82" r="70" fill="${i%2? '#fff':YEL}" opacity=".6"/>
+    <g transform="${M}">${d.back}</g>
+    ${d.front}
+    ${sparkle(256,48,8,'#fff')}${dot(268,112,3,INK)}${sparkle(240,152,6,'#fff')}
+    <circle cx="150" cy="82" r="60" fill="#fff"/>
+    <g transform="translate(150 82) scale(2.4)" stroke="${INK}" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round">${icons[i]}</g>
+    <g transform="${M}"><use href="#fig" x="75" y="28" width="150" height="135"/></g>
+  </svg>`;
+}
+
+/* ---------- Chinese content (quotes are intentionally not translated) ---------- */
+const zh = {
+stages:[
+{ name:'触发与意图',
+  q:'我为什么要冥想？我希望带来什么改变？',
+  goal:'带着期望的改变来接触冥想。目标是多重且层层叠加的：缓解痛苦与生活难题、睡眠与休息、意义与灵性成长、自我改变与习惯改变、更稳定的心与日常练习，或单纯出于好奇。同一位用户往往同时怀有多个目标。',
+  actions:['搜索冥想建议','把冥想视为解决生活难题的可能方案','寻求“冥想确实有帮助”的确认','检验自己的目标是否现实'],
+  pains:['强烈的期望遇上不确定、非线性的收益','需要既尊重个人目标、又不承诺固定结果的预期管理','需要帮助把抽象目标转化为安全的第一次练习选择'],
+  themes:['洞察 05：持续练习 / 评估进展','V2_T4：冥想者通过目标、体验与预期来评估进展'],
+  note:'与阶段 6 共用（同一主题）。',
+  opp:'意图设定与预期引导',
+  rec:['询问“今天是什么让你来到这里？”以及“怎样的体验会让你一周后觉得有用？”','把目标归入产品安全的类别：睡眠/休息、专注、情绪调节、好奇探索、灵性探索、习惯支持、整体幸福感','使用审慎措辞：“练习可能有助于……”，而不是“这将解决……”','根据目标和限制条件推荐第一次练习'],
+  risk:'承诺疗愈、临床改善、彻底转变或保证平静。' },
+{ name:'选择练习方式',
+  q:'哪种方法适合我？',
+  goal:'决定哪种方法、形式、老师、应用、专注对象、时长、姿势或传统最适合自己。',
+  actions:['比较呼吸、身体扫描、咒语、引导音频、开放觉察、行走、睡眠冥想，以及灵性、传统或世俗路径','追问是否存在“更好”或“正确”的方式','依据是否能接受、有趣、可信、易得或与信仰相容来选择','当声音、形式或风格不合适时更换'],
+  pains:['方法太多，难以判断哪种适合自己','“正确的冥想”与“适合我的目标和处境的方法”被混为一谈','需要结构化的选择帮助，而不只是庞大的内容库'],
+  themes:['洞察 01：练习之前 / 选择方法','V2_T2：冥想练习由具体的方法决策塑造','V2_T3：传统、现代工具与个人适配共同决定什么才算“正确的冥想”'],
+  opp:'练习匹配与试验循环',
+  rec:['按目标、时间、身体舒适度、期望的引导方式、灵性偏好、既往经验和偏好的专注对象进行匹配','方法对比卡片：能帮助什么、适合谁、何时应避免、练习后可留意什么','让用户短暂尝试一种方法，反思是否适合，再调整下一次推荐','绝不把某一种方法呈现为普遍最佳'],
+  risk:'内容库让用户在没有引导的情况下自行判断哪种方法适合自己。' },
+{ name:'开始与准备',
+  q:'现实中我该如何开始？',
+  goal:'把选定的练习落实为现实场景中的一次真实练习。',
+  actions:['选择练习时长、频率、姿势、地点、音频、计时器和时间段','决定是坐着、躺着、行走、使用引导音频或咒语，还是专注于呼吸、身体或声音','围绕姿势疼痛、疲劳、困倦、空间有限、噪音、家庭和工作进行调整'],
+  pains:['需要实用的准备支持，而不只是哲学性的教导','疼痛、紧绷、麻木和拉伤会让标准的坐姿冥想变得不现实','有些用户空间狭小，无法控制环境是否安静','困倦在休息模式下是期望的，但在日间觉察模式下会成为障碍'],
+  themes:['洞察 03：练习中 / 练习后 / 困倦的边界','V2_T2：冥想练习由具体的方法决策塑造','V2_T7：可持续的练习取决于生活适配，而不只是动力'],
+  note:'困倦与身体边界的需求。姿势与准备相关编码提供进一步支持。',
+  opp:'准备指引与自适应练习规划',
+  rec:['先询问模式：睡眠/休息、平静下来、专注、觉察、重置、探索','询问疼痛，以及背部、髋部和膝盖的舒适度、椅子/地面/躺姿选项、空间和噪音','提供姿势替代方案：椅子、坐垫、仰卧半躺、行走、站立、缩短练习时长','提供环境选项：自然声音、引导音频、以声音为专注对象、在嘈杂环境中行走','根据目标、经验、身体状态和过往完成情况建议练习时长'],
+  risk:'把理想的安静坐姿当作所有人的默认方式，或把困倦一概视为好事或坏事。' },
+{ name:'练习过程中',
+  q:'面对念头、感受、呼吸和分心，我该怎么做？',
+  goal:'进行冥想，并处理每一刻出现的状况。',
+  actions:['留意念头、呼吸、感受、幻象、困倦、烦躁、无聊和走神','尝试观察、控制、压抑、回到专注对象或去理解','可能陷入循环：想着自己的呼吸、用力过度、评判这次练习'],
+  pains:['不确定分心是否意味着失败','不知道该观察还是控制念头、呼吸、感受和幻象','需要简单的恢复动作，且不加重自我评判'],
+  themes:['洞察 02：练习中 / 管理体验','V2_T1：冥想者在观察与控制体验之间反复权衡'],
+  opp:'练习中引导与反思标签',
+  rec:['温和的专注对象选项：呼吸、身体、声音、视觉对象、咒语、开放觉察','将分心常态化：留意到走神本身就是练习的一部分','练习后标签：念头、呼吸循环、疼痛、困倦、平静、幻象、挫败、轻松、恐惧、无聊','根据反思模式提供微引导'],
+  risk:'让用户因念头、不适、困倦或注意力漂移而觉得自己失败了。' },
+{ name:'练习之后与意义建构',
+  q:'那段体验意味着什么？',
+  goal:'理解刚才发生的事：它是否正常、有用、有风险、属灵性、属心理，还是无关紧要。',
+  actions:['解读幻象、声音、身体感受、时间感改变、鲜明的知觉、漂浮感或情绪释放','搜索社区解释或老师的理论框架','寻求安心、认可、纠正或安全边界','可能被追逐非凡体验所吸引'],
+  pains:['非凡体验可能让人觉得有意义、兴奋、困惑或担忧','需要一个既不轻视、也不夸大意义的安全解读层','令人害怕、持续或扰乱生活的体验，以及练习之外听到声音的情况，需要审慎的安全措辞'],
+  themes:['洞察 04：练习之后 / 解读非凡体验','V2_T5：非凡的冥想体验产生了解读需求','<span class="aside">第 3 轮新颖性审核提示了可能需要进一步审视的方向，尚非最终编码：梦境与清醒梦重叠、自述的健康或临床背景、躯体释放与创伤的身体说法。</span>'],
+  opp:'体验日志、教育与安全提示',
+  rec:['允许用户记录体验，而不强求诊断或灵性解读','标签：幻象、声音、身体感受、时间扭曲、平静、恐惧、困惑、漂浮、梦幻感、鲜明知觉','附带谨慎来源标注的常见体验库','针对令人恐惧、扰乱生活、持续存在或涉及练习之外听到声音的体验，提供安全提示','若加入分享功能：设置审核类别，且不奖励追逐极端状态'],
+  risk:'助长缺乏依据的说法、追逐极端状态，或做出超出数据范围的临床解读。' },
+{ name:'进展、调整与可持续性',
+  q:'这有效吗？我该如何坚持下去？',
+  goal:'判断冥想是否有效，并决定继续、换方法、降低强度、重新开始还是停止。',
+  actions:['把预期收益与实际体验对照','追踪平静、注意力、规律性、情绪调节、睡眠、习惯改变或灵性意义','调整时长、方法、日程、老师或应用','继续、重新开始、暂停，或变得不规律'],
+  pains:['想要结果，但进展细微、非线性，且因方法而异','当练习显得无效、混乱、要求过高、过于困倦、过于强烈或与日常生活不匹配时，可能会放弃','需要基于练习质量与适配度的支持，而非保证的结果'],
+  themes:['洞察 05：持续练习 / 评估进展','V2_T4：冥想者通过目标、体验与预期来评估进展','V2_T7：可持续的练习取决于生活适配，而不只是动力'],
+  note:'与阶段 1 共用（同一主题）。',
+  opp:'进展追踪与日常节奏调整',
+  rec:['追踪规律性、把注意力带回的容易程度、情绪觉察、适配度、身体舒适度、困倦程度、练习后的清晰度','反思提示：“有什么变化（如果有的话）？”和“今天什么感觉困难？”','依据反复出现的模式建议调整：睡着、身体疼痛、无聊、方法不匹配','为中断练习的用户提供重新开始的路径'],
+  risk:'把进展简化为连续打卡、固定结果或保证转变的承诺。' }
+],
+trust:{ name:'信任、可信度、自主权与安全',
+  q:'我能信任这些指引吗？',
+  goal:'获得值得信赖的指引，而不会感到被胁迫、误导、推销、病理化，或被推向某种信仰体系。',
+  actions:['评估老师、应用、品牌方法、科学说法、社区建议和商业推广','判断来源是否显得可信、循证、灵性、世俗、传统、商业或带有胁迫性','依据适配度和感知到的权威来接受或拒绝建议'],
+  pains:['对假专家、缺乏依据的说法、类邪教的动态、付费门槛和商业动机十分敏感','希望自主选择灵性、世俗、科学或传统路径','需要围绕健康、创伤、心理体验和非凡说法划定清晰边界'],
+  themes:['洞察 06：贯穿整个旅程 / 信任与可信度','V2_T6：信任通过权威、证据、适配度与自主权来评估'],
+  opp:'贯穿整个产品的信任架构',
+  rec:['标注指引来源：社区来源、老师/传统来源、专家参与、研究支持、产品自创','标注说法类型：用户自述、传统/灵性、循证、教育性','让用户选择世俗、灵性、传统或混合路径','公开说明哪些免费、哪些付费，以及哪些说法不会提出','为临床、创伤和扰乱性体验设定安全边界'],
+  risk:'隐瞒商业动机、夸大权威，或迫使用户接受某种世界观。' }
+};
+const ZHQ = {
+ '1w0f57n':'当我想改变自己的生活，在一次又一次做出糟糕的决定之后做出好的决定时……我做出糟糕决定的原因，是那种感觉……我学会了与不适共处，这样我就能放下它。',
+ 'p6ja67i':'道路不止一条。我们的内心世界各不相同，对你有效的方法不会影响对我有效的方法……我希望每个人都能找到适合自己的路。',
+ 'p67iemq':'如果你是在训练专注力或养成习惯，一天几次较短的静坐，往往比硬撑一次马拉松式的长时间练习、到最后半睡半醒要有效……我会坚持每次 30 到 40 分钟，之后也许在当天晚些时候再加一次。',
+ '1wg8rp8':'……我上网查了一下，呼吸练习和各种冥想方式太多了，我有点不知所措，所以有没有人能帮帮我，告诉我该怎么开始冥想并逐步进阶？',
+ 'p68gqhv':'试了他的几段引导音频冥想。我就是没法接受那个声音。',
+ 'p6pyubs':'一开始无法稳稳地冥想是很正常的……多试几种冥想方式。有些就是不适合你。',
+ '1w4a780':'我因为脊柱退化容易腰痛，而且坐着或不动时疼痛会加重……我一直每天在地板上坐一个小时，但已经感觉到事后腰部更紧了……我真的很担心能否撑完整个课程。',
+ 'p6pjipf':'我只有自己的房间这一处空间……我是个大学生，不被允许离开宿舍。',
+ 'p77r039':'没必要硬撑着伤处。你可以先坐一会儿，背累了就躺下，休息好了再回到坐姿。',
+ 'p6e96y0':'冥想时，心会想尽办法抓住你的注意力。除非你愿意，否则不必对此多作解读。',
+ 'p6aa7rr':'当你意识到自己在想着“想着呼吸”，接着突然陷入某种毫无道理的元循环时，事情就变得古怪了。',
+ 'p6pjgg3':'无法专注本来就是练习的一部分……把注意力放在呼吸之类的焦点上，当你走神时轻轻地察觉到。回来就好。重新开始。',
+ 'p6ccaza':'能和别人聊这件事感觉太好了……每次我想和别人分享自己的领悟，他们都说我疯了或者嗑嗨了……有一阵子我觉得只有我是这样。',
+ '1w3kt1z':'有没有人在冥想时听到过别人的声音？今天练习之后我开始怀疑自己是不是精神出了问题……这会不会只是我深入冥想时，大脑对别的东西的一种解读？',
+ 'p6u33wt':'放下它，不要陷入信念那一面……不必与它们对抗，也不必为它们做什么，只需不带评判地留意它们……如果这类信念确实侵入了你清醒时的生活……可以考虑寻求他人的帮助。',
+ 'p6sj94k':'冥想的发展并非线性的，而且在发生的当下未必让人觉得是在进步……那些感觉最“不对劲”或最躁动的练习，往往和那些感觉深沉平静的练习起到同样多的作用。',
+ 'p69vmcr':'我已经有几年没有持续冥想了。但在那之前，我曾长期坚持。我想我需要做的就是重新开始并坚持下去。',
+ 'p6j4tsl':'我的冥想练习以系统化的方式帮助我放松、平静下来……随着时间推移，我积累了更多的平静储备，能让我撑过整天乃至数周。',
+ 'p682mhp':'留意以下危险信号，以识别伪科学家……没有经过同行评审的研究。如果你在 Google Scholar 上快速搜一下却一无所获，这不是个好兆头。',
+ 'p6iapq6':'他提到自己并不在乎说服学术界的怀疑者……如果他的研究真有正当性，学术审视难道不会对他有利吗？',
+ '1w6bd6d':'我没想到这种体验会如此强烈……疼痛、睡眠剥夺，还有诵经和锣声，真的让我觉得自己快要崩溃了……我不愿意把我如今柔软、极易被塑造的大脑的控制权和影响力交给某位 S. N. 戈恩卡先生。'
+};
+const UI_ZH = {
+  h1:'冥想用户旅程图',
+  lede:'来自 r/Meditation 的用户在从最初的期望走向长期练习的过程中，会提出什么问题、遇到什么困难、需要什么，以及每个阶段对应的产品机会与风险。',
+  meta:'Fnydox 产品构思。AI 辅助主题分析，V3 引文已核验，2026 年 10 月 13 日。',
+  st1:'讨论串', st2:'已编码来源条目', st3:'已编码摘录',
+  m1:'一次一个阶段', m2:'展开全部阶段', ex:'展开所有板块', co:'收起所有板块',
+  hint:'选择一个阶段以查看详情。左右方向键可在阶段间切换。每张卡片上的进度条比较各阶段的编码摘录数量。计数为编码表达，并非独立用户数。引文附有中文翻译，并保留英文原文。',
+  lb:'跨阶段层：我能信任这些指引吗？',
+  ls:'贯穿全部六个阶段。点击查看可信度、自主权与安全。',
+  f1h:'如何阅读这些证据',
+  f1a:'引文 ID 是编码数据集中的 Reddit 条目 ID，其后依次是所用编码，以及来源是原帖（OP post）还是评论。',
+  f1b:'评论计数指评论条目数。导出数据不含作者 ID，因此不代表独立评论者数量。',
+  f1c:'阶段 1 和阶段 6 使用同一主题（V2_T4），因此计数相同。阶段 3 显示的是困倦与身体边界的计数，姿势与准备编码作为补充支撑。',
+  f1d:'引文反映用户需求，不构成临床、灵性或功效方面的主张。引文的中文为本分析所作的翻译，英文原文一并保留，以英文原文为准。',
+  f2h:'局限',
+  f2a:'Reddit 数据来自自我选择的参与者，不能代表所有冥想用户。',
+  f2b:'这是一张旅程图，而非用户画像集；由于未对情绪进行编码，因此不呈现情绪曲线。',
+  f2c:'临床、创伤和心理健康方面的解读保持描述性并谨慎。',
+  f2d:'请通过概念测试、可用性测试和访谈，与 Fnydox 目标用户一起验证产品决策。'
+};
+const S = {
+  en:{act:'Key actions',pain:'Pain points and needs',thm:'Related themes and insights',cnt:'Coded evidence',qs:'Evidence quotes',prod:'Product opportunity and recommendation',risk:'Risk to avoid',
+      goal:'User goal.',stage:n=>`Stage ${n} of 6`,layer:'Cross-stage layer, runs across all six stages',prev:'Previous stage',next:'Next stage',back:'Back to stage 6',tolayer:'Cross-stage layer',
+      ex:'coded excerpts',src:'source items',thr:'threads',op:'OP posts',com:'comment items',ev:'Evidence',help:'What helped',open:'Open details',
+      srcmap:{'OP post':'OP post','OP reply':'OP reply','comment':'comment'},aria:(n,t)=>`Stage ${n}: ${t}`,title:'Meditation user journey map'},
+  zh:{act:'关键行动',pain:'痛点与需求',thm:'相关主题与洞察',cnt:'编码证据',qs:'证据引文',prod:'产品机会与建议',risk:'需避免的风险',
+      goal:'用户目标。',stage:n=>`第 ${n} 阶段，共 6 阶段`,layer:'跨阶段层，贯穿全部六个阶段',prev:'上一阶段',next:'下一阶段',back:'返回阶段 6',tolayer:'跨阶段层',
+      ex:'条编码摘录',src:'来源条目',thr:'讨论串',op:'楼主发帖',com:'评论条目',ev:'证据',help:'有帮助的做法',open:'查看详情',
+      srcmap:{'OP post':'OP 发帖','OP reply':'OP 回复','comment':'评论'},aria:(n,t)=>`阶段 ${n}：${t}`,title:'冥想用户旅程图'}
+};
+
+/* ---------- interactive layer ---------- */
+let lang = 'en';
+const L = () => S[lang];
+
+const ul = a => '<ul>'+a.map(x=>`<li>${x}</li>`).join('')+'</ul>';
+const fmt = n => n.toLocaleString('en-US');
+const MAXE = 2003;
+trust.name = 'Trust, credibility, autonomy, and safety';
+const all = stages.concat([trust]);
+function view(i){
+  const b = all[i];
+  if(lang!=='zh') return b;
+  const z = i<6 ? zh.stages[i] : zh.trust;
+  const m = Object.assign({}, b, z);
+  m.counts = Object.assign({}, b.counts, {note: z.note});
+  return m;
+}
+const counts = c => `<div class="cnt">
+  <div class="big">${fmt(c.e)}<small>${L().ex}</small></div>
+  <div class="bar" role="img" aria-label="${fmt(c.e)} / ${fmt(MAXE)}"><i style="width:${Math.round(c.e/MAXE*100)}%"></i></div>
+  <div class="sm">
+    <div><b>${fmt(c.s)}</b><span>${L().src}</span></div>
+    <div><b>${fmt(c.t)}</b><span>${L().thr}</span></div>
+    <div><b>${fmt(c.o)}</b><span>${L().op}</span></div>
+    <div><b>${fmt(c.c)}</b><span>${L().com}</span></div>
+  </div>${c.note?`<div class="note">${c.note}</div>`:''}</div>`;
+/* English mode shows the original only. Chinese mode shows a translation with the English original kept beneath it. IDs and codes are never translated. */
+const quotes = a => a.map(q=>{
+  const t = lang==='zh' ? ZHQ[q.id] : null;
+  const body = t
+    ? `<blockquote lang="zh-CN">\u201C${t}\u201D</blockquote><p class="orig" lang="en"><b lang="zh-CN">英文原文</b> \u201C${q.text}\u201D</p>`
+    : `<blockquote lang="en">\u201C${q.text}\u201D</blockquote>`;
+  return `<figure class="q${q.help?' help':''}${t?' zhq':''}">
+  <span class="tag">${q.help?L().help:L().ev}</span>
+  ${body}
+  <figcaption>${q.id}, ${q.code}, ${L().srcmap[q.src]||q.src}</figcaption></figure>`;
+}).join('');
+
+let mode = 'one', cur = 0, printing = false, prevMode = 'one';
+const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const strip = document.getElementById('strip');
+const host = document.getElementById('detail');
+const layerbtn = document.getElementById('layerbtn');
+
+function renderStrip(){
+  strip.innerHTML = stages.map((_,i)=>{ const s=view(i); return `<button type="button" class="card s${i+1}" data-i="${i}" aria-pressed="false" aria-label="${L().aria(i+1,s.name)}">
+  ${art(i)}
+  <span class="nm"><span class="num">${i+1}</span><span class="t">${s.name}</span></span>
+  <span class="uq">${s.q}</span>
+  <span class="mini"><span class="bar"><i style="width:${Math.round(s.counts.e/MAXE*100)}%"></i></span>${fmt(s.counts.e)} ${L().ex}</span>
+  <span class="open">${L().open}</span>
+</button>`; }).join('');
+}
+function sec(cls, title, body, open){
+  return `<details class="acc ${cls}"${(open||printing)?' open':''}><summary>${title}</summary><div class="accb">${body}</div></details>`;
+}
+const ARL = '<svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 9H3M8 4L3 9l5 5"/></svg>';
+const ARR = '<svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9h12M10 4l5 5-5 5"/></svg>';
+function panelHTML(i, animate){
+  const s = view(i), cls = i<6 ? 's'+(i+1) : 'st', T = L();
+  const left =
+    sec('act',T.act,ul(s.actions),true) +
+    sec('pain',T.pain,ul(s.pains),true) +
+    sec('thm',T.thm,ul(s.themes),false);
+  const right =
+    sec('cnt',T.cnt,counts(s.counts),true) +
+    sec('qs',T.qs,quotes(s.quotes),true) +
+    sec('prod',T.prod,`<div class="oppb">${s.opp}</div>${ul(s.rec)}`,true) +
+    sec('risk',T.risk,`<p>${s.risk}</p>`,true);
+  const label = i<6 ? `<span class="num">${i+1}</span><span>${T.stage(i+1)}</span>` : `<span>${T.layer}</span>`;
+  const nav = mode==='one' ? `<div class="pnav">
+      <button type="button" data-go="${i-1}" ${i===0?'disabled':''}>${ARL}${i===6?T.back:T.prev}</button>
+      <button type="button" data-go="${i+1}" ${i===6?'disabled':''}>${i===5?T.tolayer:T.next}${ARR}</button>
+    </div>` : '<div></div>';
+  return `<section class="panel ${cls}${animate?' enter':''}" id="p${i}" aria-label="${s.name}">
+    <div class="ph">
+      <div class="phart">${art(i)}</div>
+      <div>
+        <div class="pn">${label}</div>
+        <h2>${s.name}</h2>
+        <p class="uq">${s.q}</p>
+        <p class="goal"><b>${T.goal}</b> ${s.goal}</p>
+      </div>
+      ${nav}
+    </div>
+    <div class="cols"><div class="col">${left}</div><div class="col">${right}</div></div>
+  </section>`;
+}
+function syncButtons(){
+  strip.querySelectorAll('.card').forEach(b=>b.setAttribute('aria-pressed', String(+b.dataset.i===cur)));
+  layerbtn.setAttribute('aria-pressed', String(cur===6));
+  const tr = document.getElementById('track');
+  tr.style.setProperty('--k', Math.min(cur,5));
+  tr.classList.toggle('done', cur===6);
+  tr.querySelectorAll('b').forEach((d,k)=>{ d.classList.toggle('on', k<=cur); d.classList.toggle('cur', k===cur); });
+  document.querySelectorAll('.bar-tools .seg button').forEach(b=>b.setAttribute('aria-pressed', String(b.dataset.mode===mode)));
+  document.querySelectorAll('.langseg button').forEach(b=>b.setAttribute('aria-pressed', String(b.dataset.lang===lang)));
+}
+function render(animate){
+  host.innerHTML = mode==='one' ? panelHTML(cur, animate) : all.map((_,i)=>panelHTML(i,false)).join('');
+  syncButtons();
+}
+function reveal(){
+  const el = document.getElementById('p'+cur);
+  if(!el) return;
+  const top = el.getBoundingClientRect().top;
+  if(mode==='all' || top > window.innerHeight*0.6 || top < 0){
+    el.scrollIntoView({behavior: reduce?'auto':'smooth', block:'start'});
+  }
+}
+function select(i){
+  if(mode==='one'){ if(i!==cur){ cur=i; render(true); } else { syncButtons(); } }
+  else { cur=i; syncButtons(); }
+  reveal();
+}
+/* language switch: every data-t element keeps its English original in data-en */
+document.querySelectorAll('[data-t]').forEach(el=>{ el.dataset.en = el.innerHTML; });
+function setLang(l){
+  lang = l;
+  document.documentElement.lang = l==='zh' ? 'zh-CN' : 'en';
+  document.title = L().title;
+  document.querySelectorAll('[data-t]').forEach(el=>{ el.innerHTML = l==='zh' ? UI_ZH[el.dataset.t] : el.dataset.en; });
+  renderStrip();
+  render(false);
+}
+document.querySelector('.langseg').addEventListener('click', e=>{
+  const b = e.target.closest('button'); if(!b || b.dataset.lang===lang) return;
+  setLang(b.dataset.lang);
+});
+strip.addEventListener('click', e=>{ const b=e.target.closest('.card'); if(b) select(+b.dataset.i); });
+layerbtn.addEventListener('click', ()=>select(6));
+host.addEventListener('click', e=>{
+  const g = e.target.closest('[data-go]'); if(!g || g.disabled) return;
+  cur = +g.dataset.go; render(true); reveal();
+});
+document.querySelector('.bar-tools .seg').addEventListener('click', e=>{
+  const b = e.target.closest('button'); if(!b) return;
+  mode = b.dataset.mode; render(false);
+  if(mode==='all') reveal();
+});
+document.getElementById('expandAll').addEventListener('click', ()=>host.querySelectorAll('details').forEach(d=>d.open=true));
+document.getElementById('collapseAll').addEventListener('click', ()=>host.querySelectorAll('details').forEach(d=>d.open=false));
+const navBtns = () => [...strip.querySelectorAll('.card'), layerbtn];
+document.querySelector('nav').addEventListener('keydown', e=>{
+  if(e.key!=='ArrowRight' && e.key!=='ArrowLeft') return;
+  const list = navBtns(), k = list.indexOf(document.activeElement);
+  if(k<0) return;
+  e.preventDefault();
+  list[(k + (e.key==='ArrowRight'?1:-1) + list.length) % list.length].focus();
+});
+window.addEventListener('beforeprint', ()=>{ printing=true; prevMode=mode; mode='all'; render(false); });
+window.addEventListener('afterprint', ()=>{ printing=false; mode=prevMode; render(false); });
+renderStrip();
+render(false);
+</script>
+</body>
+</html>
