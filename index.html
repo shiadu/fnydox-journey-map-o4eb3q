@@ -38,7 +38,7 @@ button{font:inherit;color:inherit}
 .stat{border-radius:22px;padding:12px 18px;min-width:128px;color:var(--ink)}
 .stat b{display:block;font:600 26px/1 var(--display)}
 .stat span{font-size:12px}
-.stat:nth-child(1){background:var(--blue)} .stat:nth-child(2){background:var(--pink)} .stat:nth-child(3){background:var(--yellow)}
+.stat:nth-child(1){background:var(--blue)} .stat:nth-child(2){background:var(--pink)} .stat:nth-child(3){background:var(--yellow)} .stat:nth-child(4){background:var(--lav)}
 
 /* toolbar */
 .bar-tools{display:flex;flex-wrap:wrap;gap:12px 20px;align-items:center;justify-content:space-between;margin:0 0 16px}
@@ -215,12 +215,13 @@ footer ul{margin:0;padding-left:16px}
     <div>
       <h1 data-t="h1">Meditation user journey map</h1>
       <p data-t="lede">What r/Meditation users ask, struggle with and need as they move from a first hope to a lasting practice, with the product opportunity and the risk at each stage.</p>
-      <p class="meta" data-t="meta">Fnydox product ideation. AI-assisted thematic analysis, V3 quote-audited, 13 October 2026.</p>
+      <p class="meta" data-t="meta">Fnydox product ideation. AI-assisted thematic analysis of r/Meditation, coded batch Aug–Sep 2026 (27 Aug–27 Sep). V3 quote-audited, 13 October 2026.</p>
     </div>
     <div class="stats" aria-label="Size of the coded dataset">
       <div class="stat"><b>366</b><span data-t="st1">threads</span></div>
-      <div class="stat"><b>6,081</b><span data-t="st2">coded source items</span></div>
+      <div class="stat"><b>5,715</b><span data-t="st2">coded comments</span></div>
       <div class="stat"><b>13,073</b><span data-t="st3">coded excerpts</span></div>
+      <div class="stat"><b>Aug–Sep</b><span data-t="st4">2026</span></div>
     </div>
   </header>
 
@@ -561,8 +562,8 @@ const ZHQ = {
 const UI_ZH = {
   h1:'冥想用户旅程图',
   lede:'来自 r/Meditation 的用户在从最初的期望走向长期练习的过程中，会提出什么问题、遇到什么困难、需要什么，以及每个阶段对应的产品机会与风险。',
-  meta:'Fnydox 产品构思。AI 辅助主题分析，V3 引文已核验，2026 年 10 月 13 日。',
-  st1:'讨论串', st2:'已编码来源条目', st3:'已编码摘录',
+  meta:'Fnydox 产品构思。AI 辅助主题分析，r/Meditation 编码批次 2026 年 8–9 月（8 月 27 日–9 月 27 日）。V3 引文已核验，2026 年 10 月 13 日。',
+  st1:'讨论串', st2:'条评论', st3:'条编码摘录', st4:'2026 年',
   m1:'一次一个阶段', m2:'展开全部阶段', ex:'展开所有板块', co:'收起所有板块',
   hint:'选择一个阶段以查看详情。左右方向键可在阶段间切换。每张卡片上的进度条比较各阶段的编码摘录数量。计数为编码表达，并非独立用户数。引文附有中文翻译，并保留英文原文。',
   lb:'跨阶段层：我能信任这些指引吗？',
